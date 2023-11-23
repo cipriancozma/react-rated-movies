@@ -14,7 +14,7 @@ export const Navbar = () => {
       </Menu.Menu>
       <Menu.Menu position="right">
         <Menu.Item as={Link} to="/auth">
-          Sign in/Sign out
+          Sign in/out
         </Menu.Item>
       </Menu.Menu>
     </Menu>
