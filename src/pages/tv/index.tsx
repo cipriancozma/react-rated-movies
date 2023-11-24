@@ -28,6 +28,24 @@ export const TV = () => {
       return <List.Item key={idx}>{language.english_name}</List.Item>;
     }
   );
+
+  const productionCompanies = data?.production_companies?.map(
+    (company: any) => {
+      return (
+        <Segment key={company.id}>
+          {company.name}
+          <Image
+            size="small"
+            src={
+              company.logo_path
+                ? `https://image.tmdb.org/t/p/original/${company.logo_path}`
+                : ""
+            }
+          />
+        </Segment>
+      );
+    }
+  );
   return (
     <div style={{ marginTop: 50 }}>
       <Segment>
@@ -78,6 +96,10 @@ export const TV = () => {
                 <List.Item>
                   <List.Header>Type: </List.Header>
                   {data.type}
+                </List.Item>
+                <List.Item>
+                  <List.Header>Production Companies: </List.Header>
+                  {productionCompanies}
                 </List.Item>
                 <List.Item>
                   <List.Header>Original Language: </List.Header>
