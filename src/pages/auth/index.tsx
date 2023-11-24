@@ -15,7 +15,7 @@ export const Auth = () => {
 
   const handleLogin = async () => {
     await mutate();
-    localStorage.setItem("sessionId", data?.guest_session_id);
+    localStorage.setItem("sessionId", data.guest_session_id);
     navigate("/");
   };
 

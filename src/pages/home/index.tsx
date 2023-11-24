@@ -17,6 +17,7 @@ export const Home = () => {
     isLoading: isLoadingMovies,
     isError: isErrorMovies,
   } = useQuery({ queryKey: ["movies"], queryFn: fetchingMovies });
+
   const {
     data: tvData,
     isLoading: isLoadingTV,
