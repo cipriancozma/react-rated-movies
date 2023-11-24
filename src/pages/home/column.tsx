@@ -28,7 +28,9 @@ export const Column = (props: ColumnProps) => {
                     ? displayData.title
                     : displayData.name
                 }
-                meta={`Release Date: ${displayData.release_date} | Rating: ${displayData.vote_average} `}
+                meta={`Release Date: ${
+                  displayData.release_date
+                } | Rating: ${displayData.vote_average.toFixed(2)} `}
                 description={displayData.overview.slice(0, 350) + "..."}
               />
             </Link>
