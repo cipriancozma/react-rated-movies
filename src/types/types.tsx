@@ -11,9 +11,12 @@ export interface DisplayData {
   name?: string;
   vote_average: number;
   release_date: string;
+  rating?: string;
 }
 
 export interface ColumnProps {
   data: DisplayData[];
   displayType: DisplayType;
+  isRated?: boolean;
+  isPaginated?: boolean;
 }

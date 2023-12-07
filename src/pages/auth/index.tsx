@@ -11,8 +11,6 @@ export const Auth = () => {
     mutationFn: mutationLogin,
   });
 
-  console.log({ data });
-
   const handleLogin = async () => {
     await mutate();
     localStorage.setItem("sessionId", data.guest_session_id);

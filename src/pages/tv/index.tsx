@@ -17,8 +17,6 @@ export const TV = () => {
 
   if (isError) return <div>Opsss...We encountered an error...</div>;
 
-  console.log({ data });
-
   const genres = data?.genres?.map((genre: any) => {
     return <span key={genre.id}>{genre.name} | </span>;
   });

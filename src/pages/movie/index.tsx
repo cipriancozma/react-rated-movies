@@ -17,15 +17,15 @@ export const Movie = () => {
 
   if (isError) return <div>Opsss...We encountered an error...</div>;
 
-  console.log({ data });
-
-  const genres = data?.genres?.map((genre: any) => {
-    return <span key={genre.id}>{genre.name} | </span>;
+  const genres = data?.genres?.map((genre: any, idx: number) => {
+    return <span key={idx}>{genre.name} | </span>;
   });
 
-  const spokenLanguages = data?.spoken_languages?.map((language: any) => {
-    return <List.Item>{language.english_name}</List.Item>;
-  });
+  const spokenLanguages = data?.spoken_languages?.map(
+    (language: any, idx: number) => {
+      return <List.Item key={idx}>{language.english_name}</List.Item>;
+    }
+  );
   return (
     <div style={{ marginTop: 50 }}>
       <Segment>
@@ -51,6 +51,10 @@ export const Movie = () => {
             <Grid.Column width={10}>
               <List>
                 <List.Item>
+                  <List.Header>Tagline: </List.Header>
+                  {data.tagline}
+                </List.Item>
+                <List.Item>
                   <List.Header>Genres: {genres}</List.Header>
                 </List.Item>
                 <List.Item>
@@ -75,7 +79,7 @@ export const Movie = () => {
                 </List.Item>
                 <List.Item>
                   <List.Header>Original Language: </List.Header>
-                  {data.original_language.toUpperCase()}
+                  {data?.original_language?.toUpperCase()}
                 </List.Item>
                 <List.Item>
                   <List.Header>Vote average: </List.Header>

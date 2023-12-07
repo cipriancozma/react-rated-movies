@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Input, Container } from "semantic-ui-react";
 import { DisplayType } from "../../types/types";
 import { fetchingMovies, fetchingTVShows } from "./query";
 import { useQuery } from "@tanstack/react-query";
@@ -9,8 +9,11 @@ export const Home = () => {
   const [displayType, setDisplayType] = useState<DisplayType>(
     DisplayType.Movies
   );
+
   const colorMovies = displayType === DisplayType.Movies ? "blue" : undefined;
   const colorTVShows = displayType === DisplayType.TVShows ? "blue" : undefined;
+
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const {
     data: moviesData,
@@ -29,6 +32,20 @@ export const Home = () => {
   if (isErrorMovies || isErrorTV)
     return <div>Opsss...We are trying to solve it asap.</div>;
 
+  const filteredMovies = moviesData?.results?.filter((movie: any) =>
+    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredTVShows = tvData?.results?.filter((tvShow: any) =>
+    tvShow.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSearchChange = (e: any) => {
+    setSearchTerm(e.target.value);
+  };
+  console.log({ moviesData });
+  console.log({ tvData });
+
   return (
     <div style={{ marginTop: 50, height: "auto" }}>
       <Button.Group>
@@ -45,11 +62,28 @@ export const Home = () => {
           TV Shows
         </Button>
       </Button.Group>
+      <Container style={{ marginTop: 20 }}>
+        <Input
+          placeholder="Search..."
+          focus
+          icon={"search"}
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </Container>
       <div style={{ marginTop: 20 }}>
         {displayType === DisplayType.Movies ? (
-          <Column data={moviesData.results} displayType={DisplayType.Movies} />
+          <Column
+            data={filteredMovies}
+            displayType={DisplayType.Movies}
+            isPaginated
+          />
         ) : (
-          <Column data={tvData.results} displayType={DisplayType.TVShows} />
+          <Column
+            data={filteredTVShows}
+            displayType={DisplayType.TVShows}
+            isPaginated
+          />
         )}
       </div>
     </div>
