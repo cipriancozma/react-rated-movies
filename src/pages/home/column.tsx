@@ -42,78 +42,80 @@ export const Column = (props: ColumnProps) => {
   const handleRate = displayType === DisplayType.Movies ? rateMovie : rateTV;
 
   return (
-    <Grid
-      columns={3}
-      stackable
-      centered
-      verticalAlign="top"
-      padded="vertically"
-    >
-      {data.length > 0 ? (
-        data?.map((displayData: DisplayData) => (
-          <Grid.Column key={displayData.id}>
-            <Card.Group>
-              <Link
-                to={`/${displayType === DisplayType.Movies ? "movie" : "tv"}/${
-                  displayData.id
-                }`}
-              >
-                <Card
-                  style={{ height: 820 }}
-                  fluid
-                  image={`https://image.tmdb.org/t/p/original/${displayData.poster_path}`}
-                  header={
-                    displayType === DisplayType.Movies
-                      ? displayData.title
-                      : displayData.name
-                  }
-                  meta={`Release Date: ${
-                    displayType === DisplayType.Movies
-                      ? displayData.release_date
-                      : "N/A"
-                  } | Rating: ${displayData.vote_average.toFixed(2)} `}
-                  description={displayData.overview.slice(0, 350) + "..."}
-                />
-                {isRated && <Label>Your rating: {displayData?.rating}</Label>}
-              </Link>
-              <Form style={{ marginTop: 10 }}>
-                <Form.Group inline>
-                  <Form.Field>
-                    <Form.Input
-                      type="number"
-                      min="0"
-                      max="10"
-                      step="0.5"
-                      onChange={(e) => setRating(Number(e.target.value))}
-                      action={{
-                        color: "black",
-                        labelPosition: "right",
-                        icon: "star",
-                        content: "Rate",
-                        onClick: () => {
-                          handleRate(displayData.id);
-                        },
-                      }}
-                    />
-                  </Form.Field>
-                </Form.Group>
-              </Form>
-            </Card.Group>
-          </Grid.Column>
-        ))
-      ) : (
-        <Message
-          style={{ width: "50%" }}
-          size="small"
-          compact
-          icon="exclamation triangle"
-          header="What have you searched?"
-          content="No Data Found."
-        />
-      )}
+    <>
+      <Grid
+        columns={3}
+        stackable
+        centered
+        verticalAlign="top"
+        padded="vertically"
+      >
+        {data.length > 0 ? (
+          data?.map((displayData: DisplayData) => (
+            <Grid.Column key={displayData.id}>
+              <Card.Group>
+                <Link
+                  to={`/${
+                    displayType === DisplayType.Movies ? "movie" : "tv"
+                  }/${displayData.id}`}
+                >
+                  <Card
+                    style={{ height: 820 }}
+                    fluid
+                    image={`https://image.tmdb.org/t/p/original/${displayData.poster_path}`}
+                    header={
+                      displayType === DisplayType.Movies
+                        ? displayData.title
+                        : displayData.name
+                    }
+                    meta={`Release Date: ${
+                      displayType === DisplayType.Movies
+                        ? displayData.release_date
+                        : "N/A"
+                    } | Rating: ${displayData.vote_average.toFixed(2)} `}
+                    description={displayData.overview.slice(0, 350) + "..."}
+                  />
+                  {isRated && <Label>Your rating: {displayData?.rating}</Label>}
+                </Link>
+                <Form style={{ marginTop: 10 }}>
+                  <Form.Group inline>
+                    <Form.Field>
+                      <Form.Input
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="0.5"
+                        onChange={(e) => setRating(Number(e.target.value))}
+                        action={{
+                          color: "black",
+                          labelPosition: "right",
+                          icon: "star",
+                          content: "Rate",
+                          onClick: () => {
+                            handleRate(displayData.id);
+                          },
+                        }}
+                      />
+                    </Form.Field>
+                  </Form.Group>
+                </Form>
+              </Card.Group>
+            </Grid.Column>
+          ))
+        ) : (
+          <Message
+            style={{ width: "50%" }}
+            size="small"
+            compact
+            icon="exclamation triangle"
+            header="What have you searched?"
+            content="No Data Found."
+          />
+        )}
+      </Grid>
       {isPaginated && data.length > 0 && (
         <Pagination defaultActivePage={1} totalPages={10} disabled />
       )}
-    </Grid>
+    </>
   );
 };
