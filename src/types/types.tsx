@@ -1,3 +1,5 @@
+import { PaginationProps } from "semantic-ui-react";
+
 export enum DisplayType {
   Movies = "movies",
   TVShows = "tvshows",
@@ -20,4 +22,10 @@ export interface ColumnProps {
   displayType: DisplayType;
   isRated?: boolean;
   isPaginated?: boolean;
+  page?: number;
+  totalPages?: number;
+  handlePageChange?: (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    data: PaginationProps
+  ) => void;
 }

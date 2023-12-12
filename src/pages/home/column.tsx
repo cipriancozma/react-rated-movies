@@ -15,7 +15,15 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Column = (props: ColumnProps) => {
-  const { data, displayType, isRated, isPaginated } = props;
+  const {
+    data,
+    displayType,
+    isRated,
+    isPaginated,
+    handlePageChange,
+    page,
+    totalPages,
+  } = props;
   const [rating, setRating] = useState<number>(0);
 
   const handleSuccess = () => {
@@ -50,7 +58,7 @@ export const Column = (props: ColumnProps) => {
         verticalAlign="top"
         padded="vertically"
       >
-        {data.length > 0 ? (
+        {data?.length > 0 ? (
           data?.map((displayData: DisplayData) => (
             <Grid.Column key={displayData.id}>
               <Card.Group>
@@ -113,8 +121,12 @@ export const Column = (props: ColumnProps) => {
           />
         )}
       </Grid>
-      {isPaginated && data.length > 0 && (
-        <Pagination defaultActivePage={1} totalPages={10} disabled />
+      {isPaginated && totalPages && data.length > 0 && (
+        <Pagination
+          defaultActivePage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       )}
     </>
   );

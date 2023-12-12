@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Button, Input, Container } from "semantic-ui-react";
+import { Button, Input, Container, PaginationProps } from "semantic-ui-react";
 import { DisplayType } from "../../types/types";
 import { fetchingMovies, fetchingTVShows } from "./query";
 import { useQuery } from "@tanstack/react-query";
 import { Column } from "./column";
+import { fetchRecommendations } from "../recommendations/query";
 
 export const Home = () => {
   const [displayType, setDisplayType] = useState<DisplayType>(
@@ -16,22 +17,41 @@ export const Home = () => {
     displayType === DisplayType.Recommendations ? "blue" : undefined;
 
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const {
     data: moviesData,
     isLoading: isLoadingMovies,
     isError: isErrorMovies,
-  } = useQuery({ queryKey: ["movies"], queryFn: fetchingMovies });
+  } = useQuery({
+    queryKey: ["movies", currentPage],
+    queryFn: () => fetchingMovies(currentPage),
+  });
 
   const {
     data: tvData,
     isLoading: isLoadingTV,
     isError: isErrorTV,
-  } = useQuery({ queryKey: ["tv"], queryFn: fetchingTVShows });
+  } = useQuery({
+    queryKey: ["tv", currentPage],
+    queryFn: () => fetchingTVShows(currentPage),
+  });
 
-  if (isLoadingMovies || isLoadingTV) return <div>Loading...</div>;
+  const {
+    data: recommendationsData,
+    isLoading: isLoadingRecommendations,
+    isError: isErrorRecommendations,
+  } = useQuery({
+    queryKey: ["recommendations"],
+    queryFn: () => fetchRecommendations("100"),
+  });
 
-  if (isErrorMovies || isErrorTV)
+  console.log({ recommendationsData });
+
+  if (isLoadingMovies || isLoadingTV || isLoadingRecommendations)
+    return <div>Loading...</div>;
+
+  if (isErrorMovies || isErrorTV || isErrorRecommendations)
     return <div>Opsss...We are trying to solve it asap.</div>;
 
   const filteredMovies = moviesData?.results?.filter((movie: any) =>
@@ -45,8 +65,17 @@ export const Home = () => {
   const handleSearchChange = (e: any) => {
     setSearchTerm(e.target.value);
   };
+
+  const handlePageChange = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    data: PaginationProps
+  ) => {
+    const newPage = data.activePage as number;
+    setCurrentPage(newPage);
+  };
+
   console.log({ moviesData });
-  console.log({ tvData });
+  // console.log({ tvData });
 
   return (
     <div style={{ marginTop: 50, height: "auto" }}>
@@ -80,18 +109,15 @@ export const Home = () => {
         />
       </Container>
       <div style={{ marginTop: 20 }}>
-        {displayType === DisplayType.Recommendations && (
-          <Column
-            data={[]}
-            displayType={DisplayType.Recommendations}
-            isPaginated
-          />
-        )}
+        {displayType === DisplayType.Recommendations && <p>Hello</p>}
         {displayType === DisplayType.Movies && (
           <Column
             data={filteredMovies}
             displayType={DisplayType.Movies}
             isPaginated
+            handlePageChange={handlePageChange}
+            page={moviesData?.page}
+            totalPages={moviesData?.total_pages}
           />
         )}
         {displayType === DisplayType.TVShows && (
@@ -99,6 +125,9 @@ export const Home = () => {
             data={filteredTVShows}
             displayType={DisplayType.TVShows}
             isPaginated
+            handlePageChange={handlePageChange}
+            page={tvData?.page}
+            totalPages={tvData?.total_pages}
           />
         )}
       </div>

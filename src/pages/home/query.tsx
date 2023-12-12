@@ -7,18 +7,18 @@ const options = {
   },
 };
 
-export const fetchingMovies = async () => {
+export const fetchingMovies = async (page: number) => {
   const response = await fetch(
-    "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1",
+    `https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=${page}`,
     options
   );
 
   return response.json();
 };
 
-export const fetchingTVShows = async () => {
+export const fetchingTVShows = async (page: number) => {
   const response = await fetch(
-    "https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1",
+    `https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=${page}`,
     options
   );
 
