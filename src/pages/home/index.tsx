@@ -7,11 +7,13 @@ import { Column } from "./column";
 
 export const Home = () => {
   const [displayType, setDisplayType] = useState<DisplayType>(
-    DisplayType.Movies
+    DisplayType.Recommendations
   );
 
   const colorMovies = displayType === DisplayType.Movies ? "blue" : undefined;
   const colorTVShows = displayType === DisplayType.TVShows ? "blue" : undefined;
+  const colorRecommendations =
+    displayType === DisplayType.Recommendations ? "blue" : undefined;
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -50,6 +52,12 @@ export const Home = () => {
     <div style={{ marginTop: 50, height: "auto" }}>
       <Button.Group>
         <Button
+          color={colorRecommendations}
+          onClick={() => setDisplayType(DisplayType.Recommendations)}
+        >
+          Recommendations
+        </Button>
+        <Button
           color={colorMovies}
           onClick={() => setDisplayType(DisplayType.Movies)}
         >
@@ -72,13 +80,21 @@ export const Home = () => {
         />
       </Container>
       <div style={{ marginTop: 20 }}>
-        {displayType === DisplayType.Movies ? (
+        {displayType === DisplayType.Recommendations && (
+          <Column
+            data={[]}
+            displayType={DisplayType.Recommendations}
+            isPaginated
+          />
+        )}
+        {displayType === DisplayType.Movies && (
           <Column
             data={filteredMovies}
             displayType={DisplayType.Movies}
             isPaginated
           />
-        ) : (
+        )}
+        {displayType === DisplayType.TVShows && (
           <Column
             data={filteredTVShows}
             displayType={DisplayType.TVShows}

@@ -1,6 +1,7 @@
 export enum DisplayType {
   Movies = "movies",
   TVShows = "tvshows",
+  Recommendations = "recommendations",
 }
 
 export interface DisplayData {
