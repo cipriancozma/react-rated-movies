@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input, Container, PaginationProps } from "semantic-ui-react";
 import { DisplayType } from "../../types/types";
 import { fetchingMovies, fetchingTVShows } from "./query";
@@ -18,6 +18,17 @@ export const Home = () => {
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  useEffect(() => {
+    try {
+      const savedPage = localStorage.getItem(`currentPage_${displayType}`);
+      const page = savedPage ? parseInt(savedPage, 10) : 1;
+      setCurrentPage(page);
+    } catch (error) {
+      console.error("Error accessing local storage: ", error);
+      setCurrentPage(1);
+    }
+  }, [displayType]);
 
   const {
     data: moviesData,
@@ -72,6 +83,11 @@ export const Home = () => {
   ) => {
     const newPage = data.activePage as number;
     setCurrentPage(newPage);
+    try {
+      localStorage.setItem(`currentPage_${displayType}`, newPage.toString());
+    } catch (error) {
+      console.error("Error saving to local storage: ", error);
+    }
   };
 
   console.log({ moviesData });
@@ -116,7 +132,9 @@ export const Home = () => {
             displayType={DisplayType.Movies}
             isPaginated
             handlePageChange={handlePageChange}
-            page={moviesData?.page}
+            page={parseInt(
+              localStorage.getItem(`currentPage_${displayType}`) ?? "1"
+            )}
             totalPages={moviesData?.total_pages}
           />
         )}
@@ -126,7 +144,9 @@ export const Home = () => {
             displayType={DisplayType.TVShows}
             isPaginated
             handlePageChange={handlePageChange}
-            page={tvData?.page}
+            page={parseInt(
+              localStorage.getItem(`currentPage_${displayType}`) ?? "1"
+            )}
             totalPages={tvData?.total_pages}
           />
         )}
